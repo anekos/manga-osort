@@ -10,13 +10,23 @@ set cpo&vim
 
 " }}}
 
-let s:default_options = {'pre' : 0, 'key' : 0, 'ignorecase' : 1, 'pattern' : ''}
+let s:default_options = {'pre' : 0, 'key' : 0, 'ignorecase' : 0, 'pattern' : ''}
 let s:option_names = ['pre', 'key', 'ignorecase']
 let s:key_prefix = 'a'
 let s:empty_key = 'z'
 
-function! s:FParseArgs(args) " {{{
+function! s:MakeDefaultOption() " {{{
   let l:result = copy(s:default_options)
+  if exists('g:manga_osort_default_options')
+    for [l:key, l:value] in items(g:manga_osort_default_options)
+      let l:result[l:key] = l:value
+    endfor
+  endif
+  return l:result
+endfunction " }}}
+
+function! s:FParseArgs(args) " {{{
+  let l:result = s:MakeDefaultOption()
 
   let l:patterns = []
   for l:arg in a:args
@@ -45,7 +55,7 @@ endfunction " }}}
 
 function! s:QParseArgs(args) " {{{
   let l:slash = match(a:args, '/')
-  let l:result = {'pre' : 0, 'key': 0, 'pattern' : a:args}
+  let l:result = s:MakeDefaultOption()
 
   if l:slash >= 0
     let l:rest = ''
@@ -152,10 +162,9 @@ function! s:ChunkedSort(first, last, ...) " {{{
   call cursor(l:pos[1:])
 endfunction " }}}
 
-
-function! s:Compl(lead, cmdline, cursorpos)
+function! s:Compl(lead, cmdline, cursorpos) " {{{
   return map(copy(s:option_names), 'v:val . "="')
-endfunction
+endfunction " }}}
 
 command! -range=% -nargs=* -complete=customlist,s:Compl OSort call s:ChunkedSort(<line1>, <line2>, <f-args>)
 
