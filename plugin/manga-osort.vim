@@ -38,7 +38,8 @@ function! s:FParseArgs(args) " {{{
     endif
   endfor
 
-  let l:result.pattern = join(l:patterns, ' ')
+  " テケトー
+  let l:result.pattern = join(l:patterns, ' \+')
   return l:result
 endfunction " }}}
 
