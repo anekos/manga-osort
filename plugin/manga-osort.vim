@@ -11,6 +11,8 @@ set cpo&vim
 " }}}
 
 let s:option_names = ['pre', 'key']
+let s:key_prefix = 'a'
+let s:empty_key = 'z'
 
 function! s:FParseArgs(args) " {{{
   let l:result = {'pre' : 0, 'key': 0, 'pattern' : ''}
@@ -24,8 +26,8 @@ function! s:FParseArgs(args) " {{{
       if l:kv < 0
         let l:patterns = l:patterns + [l:arg]
       else
+        let l:key = l:arg[: l:kv - 1]
         if index(s:option_names, l:key) >= 0
-          let l:key = l:arg[: l:kv - 1]
           let l:value = l:arg[l:kv + 1 :]
           let l:result[l:key] = l:value
         else
@@ -69,17 +71,23 @@ endfunction " }}}
 
 function! s:Push(chunks, chunk, key_index) " {{{
   if (a:key_index < len(a:chunk)) && (a:chunk[a:key_index] != '')
-    let l:key = a:chunk[a:key_index]
-    if has_key(a:chunks, l:key)
-      let a:chunks[l:key] = a:chunks[l:key] + a:chunk
-    else
-      let a:chunks[l:key] = a:chunk
-    end
-    return 1
+    let l:key = s:key_prefix . a:chunk[a:key_index]
   else
-    echoerr 'Empty key line. Check the value of "key" option = ' . a:key_index . '.'
-    return 0
+    " 空の場合は、後ろにとりあえずもってく
+    let l:key = s:empty_key
+
+    " とりあえずエラーはやめる
+    " echoerr 'Empty key line. Check the value of "key" option = ' . a:key_index . '.'
+    " return 0
   endif
+
+  if has_key(a:chunks, l:key)
+    let a:chunks[l:key] = a:chunks[l:key] + a:chunk
+  else
+    let a:chunks[l:key] = a:chunk
+  end
+
+  return 1
 endfunction " }}}
 
 function! s:ChunkedSort(first, last, ...) " {{{
