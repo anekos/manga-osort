@@ -152,7 +152,12 @@ function! s:ChunkedSort(first, last, ...) " {{{
   call cursor(l:pos[1:])
 endfunction " }}}
 
-command! -range=% -nargs=* OSort call s:ChunkedSort(<line1>, <line2>, <f-args>)
+
+function! s:Compl(lead, cmdline, cursorpos)
+  return map(copy(s:option_names), 'v:val . "="')
+endfunction
+
+command! -range=% -nargs=* -complete=customlist,s:Compl OSort call s:ChunkedSort(<line1>, <line2>, <f-args>)
 
 " Mojo {{{
 
