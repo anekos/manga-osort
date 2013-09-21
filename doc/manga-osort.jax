@@ -1,0 +1,93 @@
+*manga-osort* はある行のまとまりでソートするプラグインです。
+実行するためのコマンド |:OSort| が提供されます。
+
+最新版:
+https://github.com/anekos/manga-osort
+
+
+						*manga-osort-synopsis*
+>
+	" Vim のオプション設定とコメントの組をオプション名でソートする
+	:OSort key=1 ^"
+
+	--これが--
+
+	" 改行コード
+	set fileformat=unix
+	set fileformats=dos,unix,mac
+
+	" 行数表示
+	set number
+
+	" 検索結果をハイライト
+	set hlsearch
+
+	" 自動ディレクトリ移動
+	" set autochdir
+
+	--こうなる--
+
+	" 自動ディレクトリ移動
+	" set autochdir
+
+	" 改行コード
+	set fileformat=unix
+	set fileformats=dos,unix,mac
+
+	" 検索結果をハイライト
+	set hlsearch
+
+	" 行数表示
+	set number
+
+
+
+==============================================================================
+インターフェース				*manga-osort-interface*
+
+------------------------------------------------------------------------------
+コマンド					*manga-osort-commands*
+
+						*:OSort*
+:[range]OSort [key={key}] [ignorecase={ignorecase}] {pattern}
+	{pattern} を基準とした行のまとまりで、ソートします。
+	まとまり内の {key} 番目の行をキーとして、ソートされます。
+	{key} のデフォルトは 0 、つまり、{pattern} の行自身です。
+	{ignorecase} に 1 を指定すると、ソートする際に大文字小文字を区別しません。
+	また、猫はかわいいです。
+
+
+==============================================================================
+設定						*manga-osort-settings*
+						*g:manga_osort_default_options*
+
+グローバル変数 |g:manga_osort_default_options| を使ってコマンドのオプションのデ
+フォルト値を設定できます。
+デフォルト値はオプション名をキーとした辞書で指定します。
+また、{pattern} もデフォルト値を設定できます。
+
+
+==============================================================================
+設定例						*manga-osort-examples*
+
+Vim のコメント + オプション設定をソートする感じのもの
+
+	let g:manga_osort_default_options = {
+	      \ 'key': '1',
+	      \ 'pattern': '^"'
+	      \ }
+
+
+==============================================================================
+既知の問題					*manga-osort-known-issues*
+
+- 猫がかわいい
+
+
+==============================================================================
+更新履歴					*manga-osort-changelog*
+
+めんどくさい
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
