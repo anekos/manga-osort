@@ -10,10 +10,14 @@ set cpo&vim
 
 " }}}
 
+" Script globals {{{
+
 let s:default_options = {'pre' : 0, 'key' : 0, 'ignorecase' : 0, 'pattern' : ''}
 let s:option_names = ['pre', 'key', 'ignorecase']
 let s:key_prefix = 'a'
 let s:empty_key = 'z'
+
+" }}}
 
 function! s:MakeDefaultOption() " {{{
   let l:result = copy(s:default_options)
