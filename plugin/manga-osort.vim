@@ -22,7 +22,7 @@ function! s:FParseArgs(args) " {{{
     else
       let l:kv = match(l:arg, '=')
       if l:kv < 0
-        let l:result.pattern = l:arg
+        let l:patterns = l:patterns + [l:arg]
       else
         if index(s:option_names, l:key) >= 0
           let l:key = l:arg[: l:kv - 1]
@@ -82,8 +82,8 @@ function! s:Push(chunks, chunk, key_index) " {{{
   endif
 endfunction " }}}
 
-function! s:ChunkedSort(first, last, args) " {{{
-  let l:opt = s:QParseArgs(a:args)
+function! s:ChunkedSort(first, last, ...) " {{{
+  let l:opt = s:FParseArgs(a:000)
 
   let l:first = 1
   let l:cur_chunk = []
@@ -137,7 +137,7 @@ function! s:ChunkedSort(first, last, args) " {{{
   call cursor(l:pos[1:])
 endfunction " }}}
 
-command! -range=% -nargs=* OSort call s:ChunkedSort(<line1>, <line2>, <q-args>)
+command! -range=% -nargs=* OSort call s:ChunkedSort(<line1>, <line2>, <f-args>)
 
 " Mojo {{{
 
