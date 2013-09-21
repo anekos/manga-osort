@@ -10,12 +10,13 @@ set cpo&vim
 
 " }}}
 
-let s:option_names = ['pre', 'key']
+let s:default_options = {'pre' : 0, 'key' : 0, 'ignorecase' : 1, 'pattern' : ''}
+let s:option_names = ['pre', 'key', 'ignorecase']
 let s:key_prefix = 'a'
 let s:empty_key = 'z'
 
 function! s:FParseArgs(args) " {{{
-  let l:result = {'pre' : 0, 'key': 0, 'pattern' : ''}
+  let l:result = copy(s:default_options)
 
   let l:patterns = []
   for l:arg in a:args
@@ -135,7 +136,12 @@ function! s:ChunkedSort(first, last, ...) " {{{
   execute (a:first + l:prefix) . ',' . a:last . 'delete'
 
   let l:last = a:first - 1 + l:prefix
-  let l:sorted_keys = sort(keys(l:chunks), 1)
+
+  if l:opt.ignorecase
+    let l:sorted_keys = sort(keys(l:chunks), 1)
+  else
+    let l:sorted_keys = sort(keys(l:chunks))
+  endif
 
   for l:key in l:sorted_keys
     call append(l:last, l:chunks[l:key])
