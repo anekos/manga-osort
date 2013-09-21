@@ -49,7 +49,9 @@ function! s:FParseArgs(args) " {{{
   endfor
 
   " テケトー
-  let l:result.pattern = join(l:patterns, ' \+')
+  if len(l:patterns)
+    let l:result.pattern = join(l:patterns, ' \+')
+  endif
   return l:result
 endfunction " }}}
 
