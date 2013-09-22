@@ -1,4 +1,4 @@
-*manga-osort* はある行のまとまりでソートするプラグインです。
+*manga-osort* はある行の塊でソートするプラグインです。
 実行するためのコマンド |:OSort| が提供されます。
 
 最新版:
@@ -50,9 +50,9 @@ https://github.com/anekos/manga-osort
 
 						*:OSort*
 :[range]OSort [key={key}] [ignorecase={ignorecase}] {pattern}
-	{pattern} を基準とした行のまとまりで、ソートします。
-	{pattern} の行から、次の {pattern} の行までをひと纏まりとします。
-	まとまり内の {key} 番目の行をキーとして、ソートされます。
+	{pattern} を基準とした行の塊で、ソートします。
+	{pattern} の行から、次の {pattern} の行までを一つの塊とします。
+	塊内の {key} 番目の行をキーとして、ソートされます。
 	{key} のデフォルトは 0 、つまり、{pattern} の行自身です。
 	{ignorecase} に 1 を指定すると、ソートする際に大文字小文字を区別しません。
 	また、猫はかわいいです。
