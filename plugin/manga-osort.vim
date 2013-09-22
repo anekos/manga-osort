@@ -19,14 +19,27 @@ let s:empty_key = 'z'
 
 " }}}
 
+function! s:MergeDict(base, add) " {{{
+  for [l:key, l:value] in items(a:add)
+    let a:base[l:key] = l:value
+  endfor
+endfunction " }}}
+
 function! s:MakeDefaultOption() " {{{
   let l:result = copy(s:default_options)
   if exists('g:manga_osort_default_options')
-    for [l:key, l:value] in items(g:manga_osort_default_options)
-      let l:result[l:key] = l:value
-    endfor
+    call s:MergeDict(l:result, g:manga_osort_default_options)
   endif
   return l:result
+endfunction " }}}
+
+function! s:TryToApplyAlias(opt, name) " {{{
+  if exists('g:manga_osort_alias') && has_key(g:manga_osort_alias, a:name)
+    call s:MergeDict(a:opt, g:manga_osort_alias[a:name])
+    return 1
+  else
+    return 0
+  endif
 endfunction " }}}
 
 function! s:FParseArgs(args) " {{{
@@ -36,6 +49,8 @@ function! s:FParseArgs(args) " {{{
   for l:arg in a:args
     if match(l:arg, '^/') == 0
       let l:patterns = l:patterns + [l:arg]
+    elseif s:TryToApplyAlias(l:result, l:arg)
+      " DO NOTHING
     else
       let l:kv = match(l:arg, '=')
       if l:kv < 0
@@ -169,7 +184,9 @@ function! s:ChunkedSort(first, last, ...) " {{{
 endfunction " }}}
 
 function! s:Compl(lead, cmdline, cursorpos) " {{{
-  return join(map(copy(s:option_names), 'v:val . "="'), "\n")
+  let l:opts = map(copy(s:option_names), 'v:val . "="')
+  let l:alias = exists('g:manga_osort_alias') ? keys(g:manga_osort_alias) : []
+  return join(l:opts + l:alias, "\n")
 endfunction " }}}
 
 command! -range=% -nargs=* -complete=custom,s:Compl OSort call s:ChunkedSort(<line1>, <line2>, <f-args>)
