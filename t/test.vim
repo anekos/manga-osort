@@ -21,4 +21,18 @@ describe 'QParseArgs'
     let g:manga_osort_default_options = {'ignorecase': 42}
     Expect Call('s:FParseArgs', []) == {'key': 0, 'ignorecase': 42, 'pre': 0, 'pattern': ''}
   end
+
+  it 'alias overwrites parameter and default'
+    unlet g:manga_osort_default_options
+    let g:manga_osort_alias = {'#x': {'pattern': 'meow'}, '#y': {'ignorecase': 616}}
+
+    Expect Call('s:FParseArgs', []) == {'key': 0, 'ignorecase': 0, 'pre': 0, 'pattern': ''}
+    Expect Call('s:FParseArgs', ['key=1', '#x']) == {'key': '1', 'ignorecase': 0, 'pre': 0, 'pattern': 'meow'}
+    Expect Call('s:FParseArgs', ['key=1', 'foo', '#x']) == {'key': '1', 'ignorecase': 0, 'pre': 0, 'pattern': 'meow'}
+    Expect Call('s:FParseArgs', ['key=1', '#x', 'foo']) == {'key': '1', 'ignorecase': 0, 'pre': 0, 'pattern': 'foo'}
+
+    let g:manga_osort_default_options = {'ignorecase': 42}
+    Expect Call('s:FParseArgs', ['ignorecase=666']) == {'key': 0, 'ignorecase': '666', 'pre': 0, 'pattern': ''}
+    Expect Call('s:FParseArgs', ['#y']) == {'key': 0, 'ignorecase': 616, 'pre': 0, 'pattern': ''}
+  end
 end

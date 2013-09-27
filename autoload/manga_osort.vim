@@ -54,7 +54,7 @@ function! s:FParseArgs(args) " {{{
     else
       let l:kv = match(l:arg, '=')
       if l:kv < 0
-        let l:patterns = l:patterns + [l:arg]
+        let l:result.pattern = l:arg
       else
         let l:key = l:arg[: l:kv - 1]
         if index(s:option_names, l:key) >= 0
@@ -67,10 +67,6 @@ function! s:FParseArgs(args) " {{{
     endif
   endfor
 
-  " テケトー
-  if len(l:patterns)
-    let l:result.pattern = join(l:patterns, ' \+')
-  endif
   return l:result
 endfunction " }}}
 
