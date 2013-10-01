@@ -12,8 +12,8 @@ set cpo&vim
 
 " Script globals {{{
 
-let s:default_options = {'pre' : 0, 'key' : 0, 'ignorecase' : 0, 'pattern' : ''}
-let s:option_names = ['pre', 'key', 'ignorecase']
+let s:default_options = {'pre' : 0, 'key' : 0, 'ignorecase' : 0, 'pattern' : '', 'keyprefix': ''}
+let s:option_names = ['pre', 'key', 'ignorecase', 'keyprefix']
 let s:key_prefix = 'a'
 let s:empty_key = 'z'
 
@@ -98,9 +98,17 @@ function! s:QParseArgs(args) " {{{
   return l:result
 endfunction " }}}
 
-function! s:Push(chunks, chunk, key_index) " {{{
+function! s:ApplyKeyPrefix(key, prefix) " {{{
+  if a:prefix ==# ''
+    return a:key
+  else
+    return substitute(a:key, '^' . a:prefix, '', '')
+  endif
+endfunction " }}}
+
+function! s:Push(chunks, chunk, key_index, key_prefix) " {{{
   if (a:key_index < len(a:chunk)) && (a:chunk[a:key_index] != '')
-    let l:key = s:key_prefix . a:chunk[a:key_index]
+    let l:key = s:key_prefix . s:ApplyKeyPrefix(a:chunk[a:key_index], a:key_prefix)
   else
     " 空の場合は、後ろにとりあえずもってく
     let l:key = s:empty_key
@@ -135,7 +143,7 @@ function! manga_osort#chunked_sort(first, last, ...) " {{{
       if l:first == 1
         let l:first = 0
       else
-        if ! s:Push(l:chunks, l:cur_chunk, l:opt.key)
+        if ! s:Push(l:chunks, l:cur_chunk, l:opt.key, l:opt.keyprefix)
           return 0
         endif
       endif
@@ -156,7 +164,7 @@ function! manga_osort#chunked_sort(first, last, ...) " {{{
     return
   endif
 
-  if ! s:Push(l:chunks, l:cur_chunk, l:opt.key)
+  if ! s:Push(l:chunks, l:cur_chunk, l:opt.key, l:opt.keyprefix)
     return 0
   endif
 
