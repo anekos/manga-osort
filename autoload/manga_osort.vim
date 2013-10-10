@@ -127,8 +127,27 @@ function! s:Push(chunks, chunk, key_index, key_prefix) " {{{
   return 1
 endfunction " }}}
 
+function! s:GetArgumentsFromContext(contexts, lines) " {{{
+    for l:context in a:contexts
+      if match(a:lines, l:context.pattern) >= 0
+        return [
+          \ 1,
+          \ type(l:context.arguments) == type("")
+          \   ? split(l:context.arguments)
+          \   : l:context.arguments
+          \ ]
+      endif
+    endfor
+    return [0, []]
+endfunction " }}}
+
 function! manga_osort#chunked_sort(first, last, ...) " {{{
-  let l:opt = s:FParseArgs(a:000)
+  if a:0 == 0 && exists('g:manga_osort_context')
+    let [l:found, l:arguments] = s:GetArgumentsFromContext(g:manga_osort_context, map(range(a:first, a:last), 'getline(v:val)'))
+    let l:opt = s:FParseArgs(l:found ? l:arguments : [])
+  else
+    let l:opt = s:FParseArgs(a:000)
+  end
 
   let l:first = 1
   let l:cur_chunk = []

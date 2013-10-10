@@ -67,6 +67,16 @@ https://github.com/anekos/manga-osort
 デフォルト値はオプション名をキーとした辞書で指定します。
 また、{pattern} もデフォルト値を設定できます。
 
+						*g:manga_osort_context*
+
+グローバル変数 |g:manga_osort_context| を使ってコマンドの引数省略時に文脈から
+引数を決定出来るようになります。
+現状では、単純にソート範囲内を正規表現でマッチングします。
+値はリストで指定します。
+リストの要素は、辞書でキー 'pattern' と 'arguments' を持ち、'pattern' の値は
+正規表現文字列、'arguments' の値は文字列かリストである必要が有ります。
+
+
 
 ==============================================================================
 設定例						*manga-osort-examples*
@@ -78,6 +88,17 @@ Vim のコメント + オプション設定をソートする感じのもの
 	      \ 'pattern': '^"'
 	      \ }
 
+NeoBundle の行をソートする
+
+	let g:manga_osort_alias = {
+	  \   '#neobundle' : {
+	  \     'keyprefix' : 'NeoBundle\S*',
+	  \     'pattern' : 'NeoBundle'
+	  \   },
+	  \ }
+	let g:manga_osort_context = [
+	  \   {'pattern' : '^NeoBundle ', 'arguments': '#neobundle'},
+	  \ ]
 
 ==============================================================================
 既知の問題					*manga-osort-known-issues*
