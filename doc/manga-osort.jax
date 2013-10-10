@@ -77,6 +77,12 @@ https://github.com/anekos/manga-osort
 正規表現文字列、'arguments' の値は文字列かリストである必要が有ります。
 
 
+						*g:manga_osort_alias*
+
+グローバル変数 |g:manga_osort_alias| を使ってコマンド引数のエイリアスを定義し、
+引数の入力を省略できます。
+値は辞書で、キーをエイリアス名、値をオプション値とします。
+オプション値の形式は、|g:manga_osort_default_options|と同じです。
 
 ==============================================================================
 設定例						*manga-osort-examples*
