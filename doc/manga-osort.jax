@@ -49,12 +49,13 @@ https://github.com/anekos/manga-osort
 コマンド					*manga-osort-commands*
 
 						*:OSort*
-:[range]OSort [key={key}] [ignorecase={ignorecase}] {pattern}
+:[range]OSort [key={key}] [ignorecase={ignorecase}] [keyprefix={keyprefix}] {pattern}
 	{pattern} を基準とした行の塊で、ソートします。
 	{pattern} の行から、次の {pattern} の行までを一つの塊とします。
 	塊内の {key} 番目の行をキーとして、ソートされます。
 	{key} のデフォルトは 0 、つまり、{pattern} の行自身です。
 	{ignorecase} に 1 を指定すると、ソートする際に大文字小文字を区別しません。
+	{keyprefix} は、正規表現でキー行のうちマッチする先頭部分を無視します。
 	また、猫はかわいいです。
 
 
